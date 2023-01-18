@@ -3,6 +3,8 @@ namespace Algortima.Graph
 {
     public class Graph<T>
     {
+        #region GraphClassInitialization
+
         private bool _isDirected = false;
         private bool _isWeighted = false;
         public List<Node<T>> Nodes { get; set; }
@@ -28,13 +30,16 @@ namespace Algortima.Graph
                     {
                         From = nodeFrom,
                         To = nodeTo,
-                        Weight = i< nodeFrom.Weights.Count ? nodeFrom.Weights[i] : 0
+                        Weight = i < nodeFrom.Weights.Count ? nodeFrom.Weights[i] : 0
                     };
                 }
 
                 return null;
             }
         }
+        #endregion
+
+        #region NodeOperations
 
         public Node<T> AddNode(T value)
         {
@@ -53,6 +58,9 @@ namespace Algortima.Graph
                 RemoveEdge(node, nodeToRemove);
             }
         }
+        #endregion
+
+        #region EdgeOperations
 
         public void AddEdge(Node<T> from, Node<T> to, int weight = 0)
         {
@@ -103,12 +111,69 @@ namespace Algortima.Graph
             }
             return edges;
         }
+        #endregion
+
+        #region UpdateIndicies
 
         private void UpdateIndices()
         {
             int i = 0;
             Nodes.ForEach(n => n.Index = i++);
         }
+        #endregion
+
+        #region DFS
+
+        public List<Node<T>> DFS()
+        {
+            bool[] isVisited = new bool[Nodes.Count];
+            List<Node<T>> result = new List<Node<T>>();
+            DFS(isVisited, Nodes[0], result);
+            return result;
+        }
+
+        private void DFS(bool[] isVisited, Node<T> node,List<Node<T>> result)
+        {
+            result.Add(node);
+            isVisited[node.Index] = true;
+            foreach (Node<T> neighbor in node.Neighbors)
+            {
+                if (!isVisited[neighbor.Index])
+                {
+                    DFS(isVisited, neighbor, result);
+                }
+            }
+        }
+        #endregion
+
+        #region BFS
+        public List<Node<T>> BFS()
+        {
+            return BFS(Nodes[0]);
+        }
+        private List<Node<T>> BFS(Node<T> node)
+        {
+            bool[] isVisited = new bool[Nodes.Count];
+            isVisited[node.Index] = true;
+            List<Node<T>> result = new List<Node<T>>();
+            Queue<Node<T>> queue = new Queue<Node<T>>();
+            queue.Enqueue(node);
+            while (queue.Count > 0)
+            {
+                Node<T> next = queue.Dequeue();
+                result.Add(next);
+                foreach (Node<T> neighbor in next.Neighbors)
+                {
+                    if (!isVisited[neighbor.Index])
+                    {
+                        isVisited[neighbor.Index] = true;
+                        queue.Enqueue(neighbor);
+                    }
+                }
+            }
+            return result;
+        }
+        #endregion
     }
 }
 
