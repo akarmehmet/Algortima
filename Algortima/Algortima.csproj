@@ -13,4 +13,7 @@
   <ItemGroup>
     <Folder Include="Graph\" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OptimizedPriorityQueue" Version="5.1.0" />
+  </ItemGroup>
 </Project>
