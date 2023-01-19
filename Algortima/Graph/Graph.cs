@@ -32,6 +32,7 @@ namespace Algortima.Graph
                         To = nodeTo,
                         Weight = i < nodeFrom.Weights.Count ? nodeFrom.Weights[i] : 0
                     };
+                    return edge;
                 }
 
                 return null;
@@ -172,6 +173,122 @@ namespace Algortima.Graph
                 }
             }
             return result;
+        }
+        #endregion
+
+        #region Kruskal
+        public List<Edge<T>> MinimumSpanningTreeKruskal()
+        {
+            List<Edge<T>> edges = GetEdges();
+            edges.Sort((a, b) => a.Weight.CompareTo(b.Weight));
+            Queue<Edge<T>> queue = new Queue<Edge<T>>(edges);
+
+            Subset<T>[] subsets = new Subset<T>[Nodes.Count];
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                subsets[i] = new Subset<T>() { Parent = Nodes[i] };
+            }
+            List<Edge<T>> result = new List<Edge<T>>();
+            while (result.Count < Nodes.Count - 1)
+            {
+                Edge<T> edge = queue.Dequeue();
+                Node<T> from = GetRoot(subsets, edge.From);
+                Node<T> to = GetRoot(subsets, edge.To);
+                if (from != to)
+                {
+                    result.Add(edge);
+                    Union(subsets, from, to);
+                }
+            }
+            return result;
+        }
+
+        private Node<T> GetRoot(Subset<T>[] subsets, Node<T> node)
+        {
+            if (subsets[node.Index].Parent != node)
+            {
+                subsets[node.Index].Parent = GetRoot(
+                    subsets,
+                    subsets[node.Index].Parent);
+            }
+            return subsets[node.Index].Parent;
+        }
+
+        private void Union(Subset<T>[] subsets, Node<T> a, Node<T> b)
+        {
+            if (subsets[a.Index].Rank > subsets[b.Index].Rank)
+            {
+                subsets[b.Index].Parent = a;
+            }
+            else if (subsets[a.Index].Rank < subsets[b.Index].Rank)
+            {
+                subsets[a.Index].Parent = b;
+            }
+            else
+            {
+                subsets[b.Index].Parent = a;
+                subsets[a.Index].Rank++;
+            }
+        }
+        #endregion
+
+        #region Prim
+        public List<Edge<T>> MinimumSpanningTreePrim()
+        {
+            int[] previous = new int[Nodes.Count];
+            previous[0] = -1;
+            int[] minWeight = new int[Nodes.Count];
+            Fill(minWeight, int.MaxValue);
+            minWeight[0] = 0;
+            bool[] isInMST = new bool[Nodes.Count];
+            Fill(isInMST, false);
+
+            for (int i = 0; i < Nodes.Count - 1; i++)
+            {
+                int minWeightIndex = GetMinimumWeightIndex(
+                    minWeight, isInMST);
+
+                isInMST[minWeightIndex] = true;
+
+                for (int j = 0; j < Nodes.Count; j++)
+                {
+                    Edge<T> edge = this[minWeightIndex, j];
+                    int weight = edge != null ? edge.Weight : -1;
+                    if (edge != null && !isInMST[j] && weight < minWeight[j])
+                    {
+                        previous[j] = minWeightIndex;
+                        minWeight[j] = weight;
+                    }
+                }
+            }
+            List<Edge<T>> result = new List<Edge<T>>();
+            for (int i = 1; i < Nodes.Count; i++)
+            {
+                Edge<T> edge = this[previous[i], i];
+                result.Add(edge);
+            }
+            return result;
+        }
+        private int GetMinimumWeightIndex(int[] weights, bool[] isInMST)
+        {
+            int minValue = int.MaxValue;
+            int minIndex = 0;
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                if (!isInMST[i] && weights[i] < minValue)
+                {
+                    minValue = weights[i];
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
+        private void Fill<Q>(Q[] array, Q value)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = value;
+            }
         }
         #endregion
     }
