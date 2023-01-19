@@ -8,7 +8,71 @@ class Program
     {
         //ImplementKruskal();
         //ImplementPrim();
-        ImplementDijkstra();
+        //ImplementDijkstra();
+        ImplementSelfDijkstra();
+    }
+
+    private static void ImplementSelfKruskal()
+    {
+        /* Let us create following weighted graph
+                   10
+               0--------1
+               | \ |
+           6| 5\ |15
+               | \ |
+               2--------3
+                   4 */
+        int V = 4; // Number of vertices in graph
+        int E = 5; // Number of edges in graph
+        KruskalBst graph = new KruskalBst(V, E);
+
+        // add edge 0-1
+        graph.edge[0].src = 0;
+        graph.edge[0].dest = 1;
+        graph.edge[0].weight = 10;
+
+        // add edge 0-2
+        graph.edge[1].src = 0;
+        graph.edge[1].dest = 2;
+        graph.edge[1].weight = 6;
+
+        // add edge 0-3
+        graph.edge[2].src = 0;
+        graph.edge[2].dest = 3;
+        graph.edge[2].weight = 5;
+
+        // add edge 1-3
+        graph.edge[3].src = 1;
+        graph.edge[3].dest = 3;
+        graph.edge[3].weight = 15;
+
+        // add edge 2-3
+        graph.edge[4].src = 2;
+        graph.edge[4].dest = 3;
+        graph.edge[4].weight = 4;
+
+        // Function call
+        graph.KruskalMST();
+    }
+
+    private static void ImplementSelfDijkstra()
+    {
+        /* Let us create the example
+               graph discussed above */
+        int[,] graph
+            = new int[,] { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+                            { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+                            { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+                            { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+                            { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                            { 0, 0, 4, 14, 10, 0, 2, 0, 0 },
+                            { 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+                            { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+                            { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+        DijkstraBst t = new DijkstraBst();
+
+        // Function call
+        t.dijkstra(graph, 0);
     }
 
     private static void ImplementDijkstra()
