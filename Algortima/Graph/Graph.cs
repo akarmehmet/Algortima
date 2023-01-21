@@ -147,6 +147,30 @@ namespace Algortima.Graph
                 }
             }
         }
+        public List<Node<T>> DFSStack()
+        {
+            bool[] isVisited = new bool[Nodes.Count];
+            isVisited[0] = true;
+            List<Node<T>> result = new List<Node<T>>();
+            Stack<Node<T>> stack = new Stack<Node<T>>();
+            stack.Push(Nodes[0]);
+
+            while (stack.Count > 0)
+            {
+                Node<T> next = stack.Pop();
+                result.Add(next);
+                foreach (var neighbor in next.Neighbors)
+                {
+                    if (!isVisited[neighbor.Index])
+                    {
+                        isVisited[neighbor.Index] = true;
+                        stack.Push(neighbor);
+                    }
+                }
+            }
+            return result;
+        }
+        
         #endregion
 
         #region BFS
@@ -235,6 +259,9 @@ namespace Algortima.Graph
         #endregion
 
         #region Prim
+
+       
+
         public List<Edge<T>> MinimumSpanningTreePrim()
         {
             int[] previous = new int[Nodes.Count];

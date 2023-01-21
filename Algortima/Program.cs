@@ -6,10 +6,66 @@ class Program
     
     static void Main(string[] args)
     {
+        ImplementQuickSort();
+        //ImplementInsertionSort();
         //ImplementKruskal();
         //ImplementPrim();
         //ImplementDijkstra();
-        ImplementSelfDijkstra();
+        //ImplementSelfDijkstra();
+        //ImplementDfs();
+    }
+
+    private static void ImplementQuickSort()
+    {
+        int[] arr = { 10, 7, 8, 9, 1, 5 };
+        int n = arr.Length;
+
+       SortingAlgorithm.quickSort(arr, 0, n - 1);
+    }
+
+    private static void ImplementInsertionSort()
+    {
+        int[] integerValues = { -11, 12, -42, 0, 1, 90, 68, 6, -9 };
+        SortingAlgorithm.InsertionSort(integerValues);
+        Console.WriteLine(string.Join(" | ", integerValues));
+
+        string[] stringValues = { "Mary", "Marcin", "Ann", "James",
+       "George", "Nicole" };
+        SortingAlgorithm.InsertionSort(stringValues);
+        Console.WriteLine(string.Join(" | ", stringValues));
+    }
+
+    private static void ImplementSelectionSort()
+    {
+        int[] integerValues = { -11, 12, -42, 0, 1, 90, 68, 6, -9 };
+        SortingAlgorithm.SelectionSort(integerValues);
+        Console.WriteLine(string.Join(" | ", integerValues));
+
+        string[] stringValues = { "Mary", "Marcin", "Ann", "James",
+       "George", "Nicole" };
+        SortingAlgorithm.SelectionSort(stringValues);
+        Console.WriteLine(string.Join(" | ", stringValues));
+    }
+
+    private static void ImplementDfs()
+    {
+        Graph<string> graph = new Graph<string>(false, true);
+        Node<string> A = graph.AddNode("A");
+        Node<string> B = graph.AddNode("B");
+        Node<string> C = graph.AddNode("C");
+        Node<string> D = graph.AddNode("D");
+        Node<string> E = graph.AddNode("E");
+
+        graph.AddEdge(A, B, 10);
+        graph.AddEdge(A, C, 3);
+        graph.AddEdge(B, C, 4);
+        graph.AddEdge(B, D, 2);
+        graph.AddEdge(C, D, 8);
+        graph.AddEdge(C, E, 2);
+        graph.AddEdge(E, D, 9);
+
+        List<Node<string>> path =  graph.DFSStack();
+        path.ForEach(e => Console.WriteLine(e.ToString()));
     }
 
     private static void ImplementSelfKruskal()
